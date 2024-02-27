@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+  body{
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6{
+    font-family: 'Playfair Display', sans-serif;
+  }
+}
+
+@layer components{
+  .navbar{
+    @apply !py-7;
+  }
+
+  .navbar .navbar-link.active{
+    @apply text-red-950;
+  }
+
+  /* sidebar */
+  .sidebar div{
+    @apply !bg-white;
+  }
+}
