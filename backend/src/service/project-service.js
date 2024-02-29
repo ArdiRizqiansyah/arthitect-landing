@@ -11,9 +11,10 @@ const create = async (request) => {
     // upload image jika ada
     if(request.files && request.files.image) {
         image = request.files.image;
-        imagePath = process.cwd() + '/src/static/project/' + image.name;
+        imageName = image.name;
+        imagePath = '/public/' + image.name;
 
-        image.mv(imagePath, (err) => {
+        image.mv(process.cwd() + imagePath, (err) => {
             if(err) {
                 console.log(err)
             }
@@ -24,7 +25,7 @@ const create = async (request) => {
         data: {
             name: project.name,
             description: project.description,
-            image: imagePath
+            image: imageName
         },
         select: {
             id: true,
@@ -51,18 +52,21 @@ const update = async (request) => {
 
     // cek apakah ada image
     if(request.files && request.files.image) {
-        // hapus image lama
-        fs.unlink(project.image, (err) => {
-            if(err) {
-                console.log(err)
-            }
-        });
+        if (project.image) {
+            // hapus image lama
+            fs.unlink(project.image, (err) => {
+                if(err) {
+                    console.log(err)
+                }
+            });   
+        }
 
         // upload image baru
         image = request.files.image;
-        imagePath = process.cwd() + '/src/static/project/' + image.name;
+        imageName = image.name;
+        imagePath = '/public/' + image.name;
 
-        image.mv(imagePath, (err) => {
+        image.mv(process.cwd() + imagePath, (err) => {
             if(err) {
                 console.log(err)
             }
@@ -76,7 +80,7 @@ const update = async (request) => {
         data: {
             name: updateDataProject.name,
             description: updateDataProject.description,
-            image: imagePath ?? project.image,
+            image: imageName ?? project.image,
         },
         select: {
             id: true,
@@ -91,7 +95,7 @@ const update = async (request) => {
 const get = async (projectId) => {
     validate(getProjectValidation, projectId);
 
-    return prismaClient.project.findUnique({
+    let project =  prismaClient.project.findUnique({
         where: {
             id: parseInt(projectId)
         },
@@ -103,10 +107,12 @@ const get = async (projectId) => {
             created_at: true,
         }
     });
+
+    return project;
 }
 
 const list = async () => {
-    return prismaClient.project.findMany({
+    let projects = prismaClient.project.findMany({
         select: {
             id: true,
             name: true,
@@ -115,6 +121,8 @@ const list = async () => {
             created_at: true,
         }
     });
+
+    return projects;
 }
 
 const remove = async (projectId) => {

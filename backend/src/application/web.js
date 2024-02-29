@@ -5,6 +5,7 @@ import { userRouter } from "../route/api.js";
 import cors from "cors";
 
 export const web = express();
+web.use(express.static('public'));
 web.use(cors());
 web.use(express.json());
 

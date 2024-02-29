@@ -36,7 +36,7 @@ const Project = () => {
                         key={project.id}
                         title={project.name}
                         description={project.description}
-                        img={project.image ? project.image : "/public/assets/images/project.svg"}
+                        img={project.image ? `${import.meta.env.VITE_BE_URL}${project.image}` : "/public/assets/images/project.svg"}
                     />
                 ))
             ) : (
